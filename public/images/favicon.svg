@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <style>
+    .sevo-bg { fill: #2563eb; } /* blue-600, matches light theme accent */
+    @media (prefers-color-scheme: dark) {
+      .sevo-bg { fill: #10b981; } /* emerald-500, matches dark theme accent */
+    }
+  </style>
+  <rect class="sevo-bg" width="24" height="24" rx="6" />
+  <g fill="none" stroke="#ffffff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="10.5" cy="10.5" r="6" />
+    <ellipse cx="10.5" cy="10.5" rx="2.5" ry="6" />
+    <path d="M4.5 10.5h12" />
+    <path d="m19 19-3.6-3.6" />
+  </g>
+</svg>

@@ -30,7 +30,8 @@
     <meta name="twitter:description" content="@yield('description', 'SEO, GEO, and AEO under one roof — get found on Google, AI answer engines, and everywhere in between.')">
     <meta name="twitter:image" content="{{ asset('images/og-cover.svg') }}">
 
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22><text y=%2218%22 font-size=%2218%22>🔎</text></svg>">
+    <link rel="icon" type="image/svg+xml" href="{{ asset('images/favicon.svg') }}">
+    <link rel="apple-touch-icon" href="{{ asset('images/favicon.svg') }}">
 
     {{-- Organization structured data, present on every page --}}
     <script type="application/ld+json">
@@ -60,6 +61,8 @@
                 <span class="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 text-white dark:bg-emerald-500">
                     <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <circle cx="11" cy="11" r="7"></circle>
+                        <ellipse cx="11" cy="11" rx="3" ry="7"></ellipse>
+                        <path d="M4 11h14"></path>
                         <path d="m21 21-4.3-4.3"></path>
                     </svg>
                 </span>
@@ -108,6 +111,8 @@
                         <span class="flex h-8 w-8 items-center justify-center rounded-lg bg-blue-600 text-white dark:bg-emerald-500">
                             <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                                 <circle cx="11" cy="11" r="7"></circle>
+                                <ellipse cx="11" cy="11" rx="3" ry="7"></ellipse>
+                                <path d="M4 11h14"></path>
                                 <path d="m21 21-4.3-4.3"></path>
                             </svg>
                         </span>
