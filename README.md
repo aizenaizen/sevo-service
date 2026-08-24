@@ -1,58 +1,97 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# SEVO Service
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A website for a service business offering **SEO, GEO, and AEO** — positioned
+together as **Search Everywhere Optimization (SEVO)**. Built on the TALL
+stack (Tailwind CSS, Alpine.js, Laravel, Livewire) with MySQL, with a
+password-gated CMS for editing page headings, managing custom pages, and
+running a blog.
 
-## About Laravel
+See `CLAUDE.md` for the full architectural rundown (routes, view structure,
+Livewire conventions, theme system).
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Requirements
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **PHP 8.3+** with these extensions (standard on most installs, but worth
+  checking): `openssl`, `pdo_mysql`, `mbstring`, `tokenizer`, `xml`, `ctype`,
+  `json`, `bcmath`, `fileinfo`, `curl`.
+- **Composer 2+**
+- **Node.js 18+** and npm (for Tailwind v4 / Vite)
+- **MySQL 8+** (or MariaDB equivalent)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+### WAMP-specific note
 
-## Learning Laravel
-
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
-
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
-
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
-
-## Agentic Development
-
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+WAMP's globally-selected PHP CLI may be older than 8.2 (Laravel 13's
+minimum). This project was built and run against PHP 8.3.14 installed
+separately under WAMP at `C:\wamp64\bin\php\php8.3.14\`. If your global
+`php` resolves to an older version, prefix `PATH` when running
+composer/artisan/npm commands from the shell, e.g.:
 
 ```bash
-composer require laravel/boost --dev
-
-php artisan boost:install
+PATH="/c/wamp64/bin/php/php8.3.14:$PATH" composer install
+PATH="/c/wamp64/bin/php/php8.3.14:$PATH" php artisan migrate
 ```
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+For Apache/WAMP to serve the site directly (instead of `artisan serve`),
+the vhost for this project must be configured to use PHP 8.2+, not
+whatever WAMP's global default is.
 
-## Contributing
+## Setup
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+composer install
+npm install
 
-## Code of Conduct
+cp .env.example .env
+php artisan key:generate
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Edit `.env` and set:
 
-## Security Vulnerabilities
+- `DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD` — your MySQL credentials
+  (database `sevo_service` is expected to already exist, or create it first)
+- `ADMIN_PASSWORD` — the password used to log into the CMS at `/admin/login`
+  (defaults to a placeholder — **change this before deploying**)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Then run migrations and link storage (needed for blog featured images to be
+publicly served):
 
-## License
+```bash
+php artisan migrate
+php artisan storage:link
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Build front-end assets:
+
+```bash
+npm run build
+```
+
+## Running locally
+
+```bash
+php artisan serve
+```
+
+Or, for asset hot-reloading while developing:
+
+```bash
+composer dev
+```
+
+Visit `http://localhost:8000`. The CMS admin area is at
+`http://localhost:8000/admin/login`.
+
+## What's in the CMS
+
+- **Pages** (`/admin/pages`) — edit the H1 heading and meta title/description
+  for the Home, Services, and Quote pages, and create/edit/delete fully
+  custom pages served at `/{slug}`.
+- **Blog posts** (`/admin/posts`) — create/edit/delete blog posts with a
+  featured image, excerpt, HTML body, categories, and a draft/published
+  workflow. Published posts appear at `/blog`.
+- **Categories** (`/admin/categories`) — simple taxonomy for grouping blog
+  posts.
+
+There's no per-user login — a single shared password (`ADMIN_PASSWORD` in
+`.env`) gates the whole `/admin` area. See CLAUDE.md's "Conventions" section
+for why, and revisit if multiple admins are ever needed.
